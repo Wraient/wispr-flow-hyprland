@@ -87,10 +87,6 @@ PY
 }
 
 log "start event-driven hyprctl dock (no ydotool, no cursor ops)"
-# Close main Hub window if present; tray/status remain.
-if [[ -x "${HOME}/.config/hypr/scripts/wispr-close-hub.sh" ]]; then
-  "${HOME}/.config/hypr/scripts/wispr-close-hub.sh" | while read -r l; do log "hub $l"; done || true
-fi
 place | while read -r l; do log "$l"; done || true
 
 # Hyprland event socket
@@ -114,9 +110,6 @@ while true; do
     case "$ev" in
       workspace\>\>*|openwindow\>\>*|focusedmon\>\>*|movewindow\>\>*)
         # Follow focused workspace/monitor. hyprctl moves only; never cursor.
-        if [[ -x "${HOME}/.config/hypr/scripts/wispr-close-hub.sh" ]]; then
-          "${HOME}/.config/hypr/scripts/wispr-close-hub.sh" | while read -r l; do log "hub $l"; done || true
-        fi
         place | while read -r l; do log "$l"; done || true
         ;;
     esac

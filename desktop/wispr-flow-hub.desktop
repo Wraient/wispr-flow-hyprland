@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Wispr Flow Hub
+Comment=Open Wispr Flow settings / Hub window
+Exec=/home/wraient/.config/hypr/scripts/wispr-open-hub.sh
+Icon=wispr-flow
+Terminal=false
+Type=Application
+Categories=Utility;AudioVideo;Audio;
+StartupWMClass=Wispr Flow
+Keywords=wispr;flow;dictation;hub;settings;

@@ -13,6 +13,7 @@ ExecStartPre=/home/wraient/.config/hypr/scripts/wispr-set-caps-ptt.sh
 ExecStart=/opt/wispr-flow-appimage/usr/lib/wispr-flow/wispr-flow --no-sandbox --class=Wispr Flow
 ExecStartPost=/bin/sleep 2
 ExecStartPost=/home/wraient/.config/hypr/scripts/wispr-set-caps-ptt.sh
+ExecStartPost=/home/wraient/.config/hypr/scripts/wispr-close-hub-once.sh
 Restart=on-failure
 RestartSec=3
 

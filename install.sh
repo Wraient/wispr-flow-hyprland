@@ -15,6 +15,14 @@ install -m 0755 "$ROOT"/scripts/wispr-*.py "$HYPR_SCRIPTS/" 2>/dev/null || true
 # ensure all executable
 chmod +x "$HYPR_SCRIPTS"/wispr-*
 
+# Optional launcher entry to open Hub (tiled) on demand
+if [[ -f "$ROOT/desktop/wispr-flow-hub.desktop" ]]; then
+  mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+  # Rewrite Exec path for this user
+  sed "s|/home/wraient/.config/hypr/scripts/wispr-open-hub.sh|$HYPR_SCRIPTS/wispr-open-hub.sh|"     "$ROOT/desktop/wispr-flow-hub.desktop"     > "${XDG_DATA_HOME:-$HOME/.local/share}/applications/wispr-flow-hub.desktop"
+  update-desktop-database "${XDG_DATA_HOME:-$HOME/.local/share}/applications" 2>/dev/null || true
+fi
+
 echo "==> Installing systemd user units"
 install -m 0644 "$ROOT"/systemd/wispr-*.service "$SYSTEMD_USER/"
 if [[ -d "$ROOT/systemd/wispr-cliphist-cleanup.service.d" ]]; then

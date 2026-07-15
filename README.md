@@ -7,7 +7,7 @@ This project packages the setup that makes **Wispr Flow** work cleanly on **Arch
 - **Caps Lock key** acts as **Escape** (cancel / normal Esc; never Caps Lock)  
 - **No sticky modifiers** (avoid Ctrl/Win/Alt PTT)  
 - **No cursor warping**  
-- Hub/main window **closed** (tray still works)  
+- Hub/main window **tiled** when opened; auto-closed only once at Flow startup (tray still works)  
 - Optional: hide Wispr from **Dank Material Shell** dock  
 
 Tested with Hyprland **0.55** (Lua config), Wispr Flow **1.6.x**, DMS shell.
@@ -141,10 +141,12 @@ Status:
 - `opacity 0.92`, `no_shadow`, `no_focus` (click-through style)  
 - no blur/anim/border  
 
-Hub:
+Hub (main settings app):
 
-- not parked on special workspace  
-- closed by `wispr-close-hub.sh` when it appears  
+- **tiled** (`float = false`) when you open it  
+- **not** continuously auto-closed (you can open it from launcher/tray)  
+- closed **once** shortly after Flow autostart via `wispr-close-hub-once.sh` so boot stays clean  
+- open anytime with `wispr-open-hub.sh` / desktop entry **Wispr Flow Hub**  
 
 ### 5. `wispr-status-dock.service`
 

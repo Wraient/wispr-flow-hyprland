@@ -39,20 +39,15 @@ hl.window_rule({
     decorate = false,
     suppress_event = "activate activatefocus maximize fullscreen",
 })
--- Hub/main app: do not park on special workspace. Close it; tray keeps Flow alive.
+-- Hub/main settings window: tiled (not floating). Status HUD stays floating.
+-- Startup-only auto-close is handled by wispr-close-hub-once.sh (not continuous).
 hl.window_rule({
     name = "wispr-hub",
     match = { class = "^(wispr-flow)$", title = "^(Hub)$" },
-    float = true,
-    no_initial_focus = true,
-    focus_on_activate = false,
-    suppress_event = "activate activatefocus",
+    float = false,
 })
 hl.window_rule({
     name = "wispr-hub-initial",
     match = { class = "^(wispr-flow)$", initial_title = "^(Hub)$" },
-    float = true,
-    no_initial_focus = true,
-    focus_on_activate = false,
-    suppress_event = "activate activatefocus",
+    float = false,
 })
