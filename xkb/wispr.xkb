@@ -4,9 +4,9 @@ xkb_keymap {
   xkb_compat    { include "complete" };
   xkb_symbols   {
     include "pc+us+inet(evdev)"
-    // Physical Caps Lock key -> Escape (cancel / normal Esc behavior; never CapsLock)
+    // Physical Caps Lock -> Escape for all apps
     key <CAPS> { [ Escape ] };
-    // Physical Esc key -> F20 only (Wispr PTT start; does not Escape apps)
+    // Physical Esc -> F20 for all apps (no Escape); helper also maps Esc->F20 for Flow PTT
     key <ESC>  { [ F20 ] };
   };
   xkb_geometry  { include "pc(pc105)" };

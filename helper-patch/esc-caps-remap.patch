@@ -1,0 +1,59 @@
+diff --git a/src/capture/evdev.rs b/src/capture/evdev.rs
+index 38a94b2..911f8cf 100644
+--- a/src/capture/evdev.rs
++++ b/src/capture/evdev.rs
+@@ -160,7 +160,9 @@ fn read_device(path: &Path, mut file: File, events: &EventSink, index: &AtomicU6
+                 KEY_RELEASE => false,
+                 _ => continue, // skip auto-repeat (value == 2)
+             };
+-            let Some(vk) = keymap::evdev_to_vk(ev.code) else {
++            // Remap before VK translation so Flow sees Esc as F20 and Caps as Esc.
++            let code = keymap::remap_evdev_for_app(ev.code);
++            let Some(vk) = keymap::evdev_to_vk(code) else {
+                 continue; // unmapped physical key — nothing the app understands
+             };
+             emit_keypress(events, index, pid, vk, press);
+@@ -197,6 +199,7 @@ impl HeldKeys for EvdevHeld {
+             }
+             for code in 0..=KEY_MAX as u16 {
+                 if bit_set(&bitmap, code) {
++                    let code = keymap::remap_evdev_for_app(code);
+                     if let Some(vk) = keymap::evdev_to_vk(code) {
+                         held.insert(vk);
+                     }
+diff --git a/src/capture/xinput.rs b/src/capture/xinput.rs
+index 3c4061e..3b375ab 100644
+--- a/src/capture/xinput.rs
++++ b/src/capture/xinput.rs
+@@ -95,7 +95,7 @@ fn read_loop(conn: RustConnection, events: &EventSink, index: &AtomicU64, pid: u
+ /// unmapped.
+ fn xkeycode_to_vk(detail: u32) -> Option<u32> {
+     let evdev = u16::try_from(detail.checked_sub(X_KEYCODE_OFFSET)?).ok()?;
+-    keymap::evdev_to_vk(evdev)
++    keymap::evdev_to_vk(keymap::remap_evdev_for_app(evdev))
+ }
+ 
+ /// Stale-key querier backed by the core-X `QueryKeymap` (a 256-bit keycode
+diff --git a/src/keymap.rs b/src/keymap.rs
+index 91628e2..c135f74 100644
+--- a/src/keymap.rs
++++ b/src/keymap.rs
+@@ -266,6 +266,18 @@ pub fn vk_to_evdev(vk: u32) -> Option<u16> {
+ /// translate physical key events back into the VK codes the app's keyboard
+ /// service expects (left/right-specific modifiers: e.g. left Ctrl = 162, left
+ /// Meta/Win = 91), matching what the Windows low-level hook reports.
++/// Hyprland / user preference remap applied only on the *capture → app* path:
++/// physical Esc is reported as F20 (PTT), physical CapsLock as Escape (cancel).
++/// Injection (app → OS) is unaffected so Escape still injects Escape for cancel
++/// and other apps still receive normal keys via compositor XKB separately.
++pub fn remap_evdev_for_app(code: u16) -> u16 {
++    match code {
++        1 => 190,  // KEY_ESC -> KEY_F20 (Wispr PTT)
++        58 => 1,   // KEY_CAPSLOCK -> KEY_ESC
++        other => other,
++    }
++}
++
+ pub fn evdev_to_vk(code: u16) -> Option<u32> {
+     Some(match code {
+         1 => 27,    // esc

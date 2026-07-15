@@ -1,7 +1,7 @@
 [Unit]
-Description=Wispr Flow (status HUD / dictation)
-After=graphical-session.target wispr-key-remap.service
-Wants=wispr-key-remap.service
+Description=Wispr Flow (status HUD / dictation) with Hyprland helper
+After=graphical-session.target
+# No longer depends on wispr-key-remap grab path
 
 [Service]
 Type=simple
@@ -10,7 +10,7 @@ KillMode=mixed
 KillSignal=SIGTERM
 FinalKillSignal=SIGKILL
 ExecStartPre=/home/wraient/.config/hypr/scripts/wispr-set-caps-ptt.sh
-ExecStart=/opt/wispr-flow-appimage/usr/lib/wispr-flow/wispr-flow --no-sandbox --class=Wispr Flow
+ExecStart=/home/wraient/.config/hypr/scripts/wispr-flow-launch.sh
 ExecStartPost=/bin/sleep 2
 ExecStartPost=/home/wraient/.config/hypr/scripts/wispr-set-caps-ptt.sh
 ExecStartPost=/home/wraient/.config/hypr/scripts/wispr-close-hub-once.sh
