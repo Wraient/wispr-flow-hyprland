@@ -1,0 +1,13 @@
+[Unit]
+Description=Delete Wispr Flow temporary clipboard entries from Vicinae/cliphist after 2s
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.config/hypr/scripts/wispr-cliphist-cleanup.sh
+Restart=on-failure
+RestartSec=2
+Environment=WISPR_CLIPHIST_DELAY=2
+
+[Install]
+WantedBy=default.target

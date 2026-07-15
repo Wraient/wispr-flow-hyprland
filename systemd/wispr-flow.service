@@ -1,0 +1,20 @@
+[Unit]
+Description=Wispr Flow (status HUD / dictation)
+After=graphical-session.target wispr-key-remap.service
+Wants=wispr-key-remap.service
+
+[Service]
+Type=simple
+TimeoutStopSec=5
+KillMode=mixed
+KillSignal=SIGTERM
+FinalKillSignal=SIGKILL
+ExecStartPre=/home/wraient/.config/hypr/scripts/wispr-set-caps-ptt.sh
+ExecStart=/opt/wispr-flow-appimage/usr/lib/wispr-flow/wispr-flow --no-sandbox --class=Wispr Flow
+ExecStartPost=/bin/sleep 2
+ExecStartPost=/home/wraient/.config/hypr/scripts/wispr-set-caps-ptt.sh
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,13 @@
+xkb_keymap {
+  xkb_keycodes  { include "evdev+aliases(qwerty)" };
+  xkb_types     { include "complete" };
+  xkb_compat    { include "complete" };
+  xkb_symbols   {
+    include "pc+us+inet(evdev)"
+    // Physical Caps Lock key -> Escape (cancel / normal Esc behavior; never CapsLock)
+    key <CAPS> { [ Escape ] };
+    // Physical Esc key -> F20 only (Wispr PTT start; does not Escape apps)
+    key <ESC>  { [ F20 ] };
+  };
+  xkb_geometry  { include "pc(pc105)" };
+};

@@ -1,0 +1,14 @@
+[Unit]
+Description=Dock Wispr Status bottom on focused Hyprland workspace (hyprctl only)
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.config/hypr/scripts/wispr-status-dock.sh
+Restart=always
+RestartSec=1
+Environment=WISPR_STATUS_BOTTOM_GAP=36
+Environment=WISPR_STATUS_POLL_SECS=0.5
+
+[Install]
+WantedBy=default.target
